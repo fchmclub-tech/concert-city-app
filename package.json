@@ -1,0 +1,23 @@
+{
+  "name": "concert-city-app",
+  "private": true,
+  "version": "3.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 0.0.0.0",
+    "build": "vite build",
+    "lint": "oxlint",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@vitejs/plugin-react": "^5.0.4",
+    "lucide-react": "^0.468.0",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "react-router-dom": "^7.18.1",
+    "vite": "^8.1.4"
+  },
+  "devDependencies": {
+    "oxlint": "^1.30.0"
+  }
+}
