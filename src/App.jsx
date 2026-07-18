@@ -12,6 +12,7 @@ import Hero from './components/Hero.jsx'
 import Categories from './components/Categories.jsx'
 import FeaturedConcert from './components/FeaturedConcert.jsx'
 import TrendingConcerts from './components/TrendingConcerts.jsx'
+import PriceComparisonCard from './components/PriceComparisonCard.jsx'
 import Footer from './components/Footer.jsx'
 const genres = [
   'All',
@@ -58,23 +59,45 @@ function transformEvent(event) {
   const classification = event.classifications?.[0]
   const priceRange = event.priceRanges?.[0]
 
-  return {
-    id: event.id,
-    artist: event.name || 'Concert',
-    genre:
-      classification?.genre?.name ||
-      classification?.segment?.name ||
-      'Music',
-    city: venue?.city?.name || '',
-    state: venue?.state?.stateCode || '',
-    venue: venue?.name || 'Venue TBA',
-    date: formatDate(event.dates?.start?.localDate),
-    time: formatTime(event.dates?.start?.localTime),
-    image: chooseImage(event.images),
-    ticketUrl: event.url || '#',
-    minimumPrice: priceRange?.min ?? null,
-  }
+ return {
+  id: event.id,
+  artist: event.name || 'Concert',
+
+  genre:
+    classification?.genre?.name ||
+    classification?.segment?.name ||
+    'Music',
+
+  city: venue?.city?.name || '',
+  state: venue?.state?.stateCode || '',
+  venue: venue?.name || 'Venue TBA',
+
+  date: formatDate(event.dates?.start?.localDate),
+  time: formatTime(event.dates?.start?.localTime),
+
+  image: chooseImage(event.images),
+
+  ticketUrl: event.url || '#',
+
+  minimumPrice: priceRange?.min ?? null,
+
+  providers: {
+    ticketmaster: {
+      price: priceRange?.min ?? null,
+      url: event.url || '#',
+    },
+
+    seatgeek: null,
+
+    stubhub: null,
+
+    vividseats: null,
+
+    tickpick: null,
+  },
 }
+  }
+
 
 export default function App() {
   const [cityInput, setCityInput] = useState('Salt Lake City')
@@ -391,15 +414,44 @@ export default function App() {
                     >
                       <MapPin size={16} />
                       <span>View on map</span>
-                    </a>
+</a>
 
-                    <div className="ticketOptions">
-                      <a
-                        href={concert.ticketUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="ticketButton"
-                      >
+<PriceComparisonCard
+  providers={[
+    {
+      name: 'Ticketmaster',
+      price: concert.providers?.ticketmaster?.price ?? null,
+      url:
+        concert.providers?.ticketmaster?.url ||
+        concert.ticketUrl,
+    },
+    {
+      name: 'SeatGeek',
+      price: concert.providers?.seatgeek?.price ?? null,
+      url:
+        concert.providers?.seatgeek?.url ||
+        `https://seatgeek.com/search?search=${encodeURIComponent(
+          `${concert.artist} ${concert.city}`,
+        )}`,
+    },
+    {
+      name: 'StubHub',
+      price: concert.providers?.stubhub?.price ?? null,
+      url:
+        concert.providers?.stubhub?.url ||
+        `https://www.stubhub.com/secure/Search?q=${encodeURIComponent(
+          `${concert.artist} ${concert.city}`,
+        )}`,
+    },
+  ]}
+/>
+<div className="ticketOptions">
+  <a
+    href={concert.ticketUrl}
+    target="_blank"
+    rel="noopener noreferrer"
+    className="ticketButton"
+  >
                         <span>Ticketmaster</span>
                         <strong>
                           {concert.minimumPrice !== null

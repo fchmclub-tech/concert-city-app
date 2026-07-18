@@ -943,3 +943,122 @@ footer {
     width: 100%;
   }
 }
+/* ===============================
+   PRICE COMPARISON / BEST DEAL
+================================= */
+
+.priceComparisonCard {
+  margin-top: 18px;
+  padding: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 18px;
+  background:
+    linear-gradient(
+      145deg,
+      rgba(124, 58, 237, 0.16),
+      rgba(7, 9, 20, 0.86)
+    );
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.24);
+}
+
+.bestDealHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.bestDealBadge,
+.bestDealSavings {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border-radius: 999px;
+  font-size: 0.74rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+}
+
+.bestDealBadge {
+  padding: 7px 11px;
+  background: rgba(250, 204, 21, 0.14);
+  color: #fde047;
+  border: 1px solid rgba(250, 204, 21, 0.28);
+}
+
+.bestDealSavings {
+  color: #86efac;
+}
+
+.bestDealPrimary {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 16px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.bestDealPrimary p {
+  margin: 0 0 5px;
+  color: rgba(255, 255, 255, 0.58);
+  font-size: 0.78rem;
+}
+
+.bestDealPrimary strong {
+  color: white;
+  font-size: 1rem;
+}
+
+.bestDealPrimary > span {
+  color: white;
+  font-size: 1.85rem;
+  font-weight: 900;
+  line-height: 1;
+}
+
+.providerComparisonList {
+  display: grid;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.providerComparisonRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 14px;
+  min-height: 42px;
+  padding: 9px 11px;
+  border-radius: 12px;
+  color: rgba(255, 255, 255, 0.76);
+  text-decoration: none;
+  transition:
+    background 0.2s ease,
+    color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.providerComparisonRow:hover {
+  background: rgba(255, 255, 255, 0.08);
+  color: white;
+  transform: translateX(3px);
+}
+
+.providerComparisonRow.best {
+  background: rgba(124, 58, 237, 0.16);
+  color: white;
+}
+
+.providerComparisonRow span,
+.providerComparisonRow strong {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.providerComparisonRow strong {
+  font-size: 0.9rem;
+}
