@@ -1,4 +1,11 @@
-import { Search, Star } from 'lucide-react'
+import {
+  ArrowRight,
+  Heart,
+  Search,
+  ShieldCheck,
+  Sparkles,
+  Ticket,
+} from 'lucide-react'
 import logo from '../assets/front-center-logo.png'
 
 export default function Hero({
@@ -10,22 +17,19 @@ export default function Hero({
 }) {
   return (
     <div className="heroContent">
-      <img
-        src={logo}
-        alt="Front Center Tix"
-        className="heroLogo"
-      />
-
-      <p className="eyebrow">
-        <Star size={16} />
-        One Pass. All The Live.
-      </p>
-
-      <h1>Find your next unforgettable live event.</h1>
+      <div className="heroBadge">
+        <Sparkles size={15} />
+        Your all-in-one live event search
+      </div>
+     
+      <h1>
+        Your next great night
+        <span> starts here.</span>
+      </h1>
 
       <p className="subtitle">
-        Search concerts by city, compare ticket options, save favorites, and
-        jump directly to Ticketmaster, SeatGeek, or StubHub.
+        Discover concerts near you, compare ticket options, save your favorite
+        events, and find your way to the front row.
       </p>
 
       <form className="searchBox" onSubmit={handleSubmit}>
@@ -34,26 +38,60 @@ export default function Hero({
         <input
           value={cityInput}
           onChange={(event) => setCityInput(event.target.value)}
-          placeholder="Enter a city, e.g. Salt Lake City"
+          placeholder="Search by city, e.g. Salt Lake City"
           aria-label="Concert city"
         />
 
         <button type="submit" disabled={loading}>
-          {loading ? 'Searching...' : 'Search concerts'}
+          <span>{loading ? 'Searching...' : 'Find events'}</span>
+          {!loading && <ArrowRight size={18} />}
         </button>
       </form>
 
+      <div className="popularCities">
+        <span>Popular:</span>
+     
+
+        {['Salt Lake City', 'Las Vegas', 'Denver', 'Los Angeles'].map(
+          (city) => (
+            <button
+              key={city}
+              type="button"
+              onClick={() => setCityInput(city)}
+            >
+              {city}
+            </button>
+          ),
+        )}
+      </div>
+<img
+  src={logo}
+  alt="Front Center Tix"
+  className="heroLogo"
+/>
       <div className="heroStats">
         <span>
-          <strong>40</strong> results per search
+          <Ticket size={18} />
+          <span>
+            <strong>40</strong>
+            Events per search
+          </span>
         </span>
 
         <span>
-          <strong>3</strong> ticket providers
+          <ShieldCheck size={18} />
+          <span>
+            <strong>3</strong>
+            Ticket providers
+          </span>
         </span>
 
         <span>
-          <strong>{favoritesCount}</strong> saved favorites
+          <Heart size={18} />
+          <span>
+            <strong>{favoritesCount}</strong>
+            Saved favorites
+          </span>
         </span>
       </div>
     </div>

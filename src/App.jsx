@@ -5,15 +5,14 @@ import {
   Heart,
   LoaderCircle,
   MapPin,
-  Search,
   SlidersHorizontal,
-  Star,
-  Ticket,
 } from 'lucide-react'
-import './App.css'
 import Header from './components/Header.jsx'
 import Hero from './components/Hero.jsx'
-
+import Categories from './components/Categories.jsx'
+import FeaturedConcert from './components/FeaturedConcert.jsx'
+import TrendingConcerts from './components/TrendingConcerts.jsx'
+import Footer from './components/Footer.jsx'
 const genres = [
   'All',
   'Rock',
@@ -83,6 +82,7 @@ export default function App() {
   const [genre, setGenre] = useState('All')
   const [concerts, setConcerts] = useState([])
   const [loading, setLoading] = useState(false)
+  const [currentPage, setCurrentPage] = useState('home')
   const [error, setError] = useState('')
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false)
 
@@ -204,18 +204,58 @@ export default function App() {
   return (
     <main>
       <section className="hero">
-  <Header />
+        <Header
+          currentPage={currentPage}
+          onShowHome={() => {
+            setCurrentPage('home')
+            setShowFavoritesOnly(false)
+            window.scrollTo({ top: 0, behavior: 'smooth' })
+          }}
+          onShowTickets={() => {
+            setCurrentPage('tickets')
+            setShowFavoritesOnly(false)
+            document
+              .getElementById('results')
+              ?.scrollIntoView({ behavior: 'smooth' })
+          }}
+          onShowFavorites={() => {
+            setCurrentPage('favorites')
+            setShowFavoritesOnly(true)
+            document
+              .getElementById('results')
+              ?.scrollIntoView({ behavior: 'smooth' })
+          }}
+        />
 
-  <Hero
-    cityInput={cityInput}
-    setCityInput={setCityInput}
-    loading={loading}
-    handleSubmit={handleSubmit}
-    favoritesCount={favorites.length}
-  />
-</section>
+        <Hero
+          cityInput={cityInput}
+          setCityInput={setCityInput}
+          loading={loading}
+          handleSubmit={handleSubmit}
+          favoritesCount={favorites.length}
+        />
+      </section>
 
-      <section className="resultsWrap" id="results">
+    <FeaturedConcert concerts={concerts} />
+
+<TrendingConcerts concerts={concerts} />
+
+<Categories
+  selectedCategory={genre}
+  onSelectCategory={(selectedGenre) => {
+    setGenre(selectedGenre)
+    setShowFavoritesOnly(false)
+    searchConcerts(searchedCity, selectedGenre)
+
+    setTimeout(() => {
+      document
+        .getElementById('results')
+        ?.scrollIntoView({ behavior: 'smooth' })
+    }, 100)
+  }}
+/>
+
+<section className="resultsWrap" id="results">
         <div className="controls">
           <div>
             <p className="sectionLabel">
@@ -411,10 +451,7 @@ export default function App() {
         )}
       </section>
 
-      <footer>
-        Live event information provided through the Ticketmaster Discovery API.
-        Prices and availability may change.
-      </footer>
+      <Footer />
     </main>
   )
 }
