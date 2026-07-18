@@ -81,23 +81,45 @@ function transformEvent(event) {
 
   minimumPrice: priceRange?.min ?? null,
 
-  providers: {
-    ticketmaster: {
-      price: priceRange?.min ?? null,
-      url: event.url || '#',
-    },
-
-    seatgeek: null,
-
-    stubhub: null,
-
-    vividseats: null,
-
-    tickpick: null,
+ providers: {
+  ticketmaster: {
+    name: 'Ticketmaster',
+    price: priceRange?.min ?? null,
+    url: event.url || '#',
+    official: true,
   },
-}
-  }
 
+  seatgeek: {
+    name: 'SeatGeek',
+    price: null,
+    url: null,
+    status: 'coming-soon',
+  },
+
+  stubhub: {
+    name: 'StubHub',
+    price: null,
+    url: null,
+    status: 'coming-soon',
+  },
+
+  vividseats: {
+    name: 'Vivid Seats',
+    price: null,
+    url: null,
+    status: 'coming-soon',
+  },
+
+  tickpick: {
+    name: 'TickPick',
+    price: null,
+    url: null,
+    status: 'coming-soon',
+    noFees: true,
+  },
+},
+ }  
+ }
 
 export default function App() {
   const [cityInput, setCityInput] = useState('Salt Lake City')
@@ -415,78 +437,26 @@ export default function App() {
                       <MapPin size={16} />
                       <span>View on map</span>
 </a>
+<PriceComparisonCard
+eventName={concert.artist}
+  providers={[
+    concert.providers.ticketmaster,
+    concert.providers.seatgeek,
+    concert.providers.stubhub,
+    concert.providers.vividseats,
+    concert.providers.tickpick,
+  ]}
+/>
 
 <PriceComparisonCard
   providers={[
-    {
-      name: 'Ticketmaster',
-      price: concert.providers?.ticketmaster?.price ?? null,
-      url:
-        concert.providers?.ticketmaster?.url ||
-        concert.ticketUrl,
-    },
-    {
-      name: 'SeatGeek',
-      price: concert.providers?.seatgeek?.price ?? null,
-      url:
-        concert.providers?.seatgeek?.url ||
-        `https://seatgeek.com/search?search=${encodeURIComponent(
-          `${concert.artist} ${concert.city}`,
-        )}`,
-    },
-    {
-      name: 'StubHub',
-      price: concert.providers?.stubhub?.price ?? null,
-      url:
-        concert.providers?.stubhub?.url ||
-        `https://www.stubhub.com/secure/Search?q=${encodeURIComponent(
-          `${concert.artist} ${concert.city}`,
-        )}`,
-    },
+    concert.providers.ticketmaster,
+    concert.providers.seatgeek,
+    concert.providers.stubhub,
+    concert.providers.vividseats,
+    concert.providers.tickpick,
   ]}
 />
-<div className="ticketOptions">
-  <a
-    href={concert.ticketUrl}
-    target="_blank"
-    rel="noopener noreferrer"
-    className="ticketButton"
-  >
-                        <span>Ticketmaster</span>
-                        <strong>
-                          {concert.minimumPrice !== null
-                            ? `From $${Math.round(concert.minimumPrice)}`
-                            : 'See prices'}
-                        </strong>
-                        <ExternalLink size={15} />
-                      </a>
-
-                      <a
-                        href={`https://seatgeek.com/search?search=${encodeURIComponent(
-                          `${concert.artist} ${concert.city}`,
-                        )}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="ticketButton secondaryTicketButton"
-                      >
-                        <span>SeatGeek</span>
-                        <strong>Check tickets</strong>
-                        <ExternalLink size={15} />
-                      </a>
-
-                      <a
-                        href={`https://www.stubhub.com/secure/Search?q=${encodeURIComponent(
-                          `${concert.artist} ${concert.city}`,
-                        )}`}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="ticketButton secondaryTicketButton"
-                      >
-                        <span>StubHub</span>
-                        <strong>Check tickets</strong>
-                        <ExternalLink size={15} />
-                      </a>
-                    </div>
                   </div>
                 </article>
               )

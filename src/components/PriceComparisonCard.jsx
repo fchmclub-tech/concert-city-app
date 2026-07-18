@@ -1,93 +1,94 @@
-import { ExternalLink, Trophy } from 'lucide-react'
+import { useState } from 'react'
+import {
+  ExternalLink,
+  ShieldCheck,
+  Ticket,
+} from 'lucide-react'
+import CompareTicketsModal from './CompareTicketsModal.jsx'
 
 export default function PriceComparisonCard({
   providers = [],
+  eventName = 'Event',
 }) {
-  const validProviders = providers
-    .filter(
-      (provider) =>
-        provider &&
-        typeof provider.price === 'number' &&
-        provider.url,
-    )
-    .sort((first, second) => first.price - second.price)
+  const [showModal, setShowModal] = useState(false)
 
- if (validProviders.length === 0) {
-  return (
-    <div className="priceComparisonCard">
-      <div className="bestDealHeader">
-        <span className="bestDealBadge">
-          <Trophy size={15} />
-          Compare tickets
-        </span>
-      </div>
-
-      <div className="bestDealPrimary">
-        <div>
-          <p>Live prices are not currently listed</p>
-          <strong>Check each provider below</strong>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-  const bestDeal = validProviders[0]
-  const highestPrice =
-    validProviders[validProviders.length - 1].price
-
-  const savings = Math.max(
-    0,
-    Math.round(highestPrice - bestDeal.price),
+  const availableProviders = providers.filter(
+    (provider) => provider && provider.url,
   )
 
-  return (
-    <div className="priceComparisonCard">
-      <div className="bestDealHeader">
-        <span className="bestDealBadge">
-          <Trophy size={15} />
-          Best deal
-        </span>
+  const primaryProvider =
+    availableProviders.find((provider) => provider.official) ||
+    availableProviders[0] ||
+    null
 
-        {savings > 0 && (
-          <span className="bestDealSavings">
-            Save ${savings}
+  const providerCount = providers.filter(Boolean).length
+
+  return (
+    <>
+      <div className="priceComparisonCard compactComparisonCard">
+        <div className="bestDealHeader">
+          <span className="bestDealBadge">
+            <Ticket size={15} />
+            Compare tickets
           </span>
-        )}
-      </div>
 
-      <div className="bestDealPrimary">
-        <div>
-          <p>Lowest available price</p>
-          <strong>{bestDeal.name}</strong>
+          <span className="providerCount">
+            {providerCount} providers
+          </span>
         </div>
 
-        <span>${Math.round(bestDeal.price)}</span>
-      </div>
-
-      <div className="providerComparisonList">
-        {validProviders.map((provider, index) => (
+        {primaryProvider ? (
           <a
-            key={`${provider.name}-${provider.price}`}
-            href={provider.url}
+            href={primaryProvider.url}
             target="_blank"
             rel="noopener noreferrer"
-            className={`providerComparisonRow ${
-              index === 0 ? 'best' : ''
-            }`}
+            className="primaryProviderRow"
           >
-            <span>
-              {index === 0 && <Trophy size={14} />}
-              {provider.name}
+            <span className="providerName">
+              <Ticket size={17} />
+
+              <span>
+                {primaryProvider.name}
+
+                {primaryProvider.official && (
+                  <small>
+                    <ShieldCheck size={12} />
+                    Official seller
+                  </small>
+                )}
+              </span>
             </span>
 
             <strong>
-              ${Math.round(provider.price)}
-              <ExternalLink size={13} />
+              {typeof primaryProvider.price === 'number'
+                ? `From $${Math.round(primaryProvider.price)}`
+                : 'See prices'}
+
+              <ExternalLink size={14} />
             </strong>
           </a>
-        ))}
+        ) : (
+          <div className="noProviderMessage">
+            Live ticket links are not currently available.
+          </div>
+        )}
+
+        <button
+          type="button"
+          className="compareAllButton"
+          onClick={() => setShowModal(true)}
+        >
+          Compare all {providerCount} providers
+        </button>
       </div>
-    </div>
+
+      {showModal && (
+        <CompareTicketsModal
+          providers={providers}
+          eventName={eventName}
+          onClose={() => setShowModal(false)}
+        />
+      )}
+    </>
   )
 }
